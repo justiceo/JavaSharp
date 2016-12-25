@@ -892,7 +892,7 @@ public class SharpVisitor implements VoidVisitor<Object> {
             n.getClassExpr().accept(this, arg);
             printer.print(".");
         }
-        printer.print("super");
+        printer.print("base");
     }
 
     @Override public void visit(final MethodCallExpr n, final Object arg) {
@@ -1100,7 +1100,7 @@ public class SharpVisitor implements VoidVisitor<Object> {
                 printer.print(".");
             }
             printTypeArgs(n.getTypeArgs(), arg);
-            printer.print("super");
+            printer.print("base");
         }
         printArguments(n.getArgs(), arg);
         printer.print(";");
