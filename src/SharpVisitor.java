@@ -239,18 +239,19 @@ public class SharpVisitor implements VoidVisitor<Object> {
         }
     }
 
+    // this is where we take the very first step!
     @Override public void visit(final CompilationUnit n, final Object arg) {
         printJavaComment(n.getComment(), arg);
-
-        if (n.getPackage() != null) {
-            n.getPackage().accept(this, arg);
-        }
 
         if (!isNullOrEmpty(n.getImports())) {
             for (final ImportDeclaration i : n.getImports()) {
                 i.accept(this, arg);
             }
             printer.printLn();
+        }
+
+        if (n.getPackage() != null) {
+            n.getPackage().accept(this, arg);
         }
 
         if (!isNullOrEmpty(n.getTypes())) {
