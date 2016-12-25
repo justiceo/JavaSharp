@@ -158,6 +158,22 @@ public class SharpVisitor implements VoidVisitor<Object> {
         }
     }
 
+    private void printModifiers(final int modifiers, Object type) {
+        if(!ModifierSet.isFinal(modifiers)) {
+            printModifiers(modifiers);
+            return;
+        }
+        if(type instanceof FieldDeclaration || type instanceof VariableDeclarationExpr) {
+            printer.print("readonly ");
+        }
+        else if (type instanceof BaseParameter) { // catch Parameter & multi-type param
+            // do nothing
+        }
+        else {
+            printer.print("sealed ");
+        }
+    }
+
     private void printMembers(final List<BodyDeclaration> members, final Object arg) {
         for (final BodyDeclaration member : members) {
             printer.printLn();
@@ -328,7 +344,7 @@ public class SharpVisitor implements VoidVisitor<Object> {
         printJavaComment(n.getComment(), arg);
         printJavadoc(n.getJavaDoc(), arg);
         printMemberAnnotations(n.getAnnotations(), arg);
-        printModifiers(n.getModifiers());
+        printModifiers(n.getModifiers(), n);
 
         if (n.isInterface()) {
             printer.print("interface ");
@@ -550,7 +566,7 @@ public class SharpVisitor implements VoidVisitor<Object> {
         printJavaComment(n.getComment(), arg);
         printJavadoc(n.getJavaDoc(), arg);
         printMemberAnnotations(n.getAnnotations(), arg);
-        printModifiers(n.getModifiers());
+        printModifiers(n.getModifiers(), n);
         n.getType().accept(this, arg);
 
         printer.print(" ");
@@ -974,7 +990,7 @@ public class SharpVisitor implements VoidVisitor<Object> {
         printJavaComment(n.getComment(), arg);
         printJavadoc(n.getJavaDoc(), arg);
         printMemberAnnotations(n.getAnnotations(), arg);
-        printModifiers(n.getModifiers());
+        printModifiers(n.getModifiers(), n);
 
         printTypeParameters(n.getTypeParameters(), arg);
         if (!n.getTypeParameters().isEmpty()) {
@@ -1014,7 +1030,7 @@ public class SharpVisitor implements VoidVisitor<Object> {
         printJavaComment(n.getComment(), arg);
         printJavadoc(n.getJavaDoc(), arg);
         //printMemberAnnotations(n.getAnnotations(), arg);
-        printModifiers(n.getModifiers());
+        printModifiers(n.getModifiers(), n);
         if (n.isDefault()) {
             printer.print("default ");
         }
