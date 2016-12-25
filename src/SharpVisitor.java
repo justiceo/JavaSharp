@@ -333,7 +333,7 @@ public class SharpVisitor implements VoidVisitor<Object> {
         printTypeParameters(n.getTypeParameters(), arg);
 
         if (!isNullOrEmpty(n.getExtends())) {
-            printer.print(" extends ");
+            printer.print(" : ");
             for (final Iterator<ClassOrInterfaceType> i = n.getExtends().iterator(); i.hasNext();) {
                 final ClassOrInterfaceType c = i.next();
                 c.accept(this, arg);
@@ -344,7 +344,8 @@ public class SharpVisitor implements VoidVisitor<Object> {
         }
 
         if (!isNullOrEmpty(n.getImplements())) {
-            printer.print(" implements ");
+            if(isNullOrEmpty(n.getExtends()))
+                printer.print(" : ");
             for (final Iterator<ClassOrInterfaceType> i = n.getImplements().iterator(); i.hasNext();) {
                 final ClassOrInterfaceType c = i.next();
                 c.accept(this, arg);
