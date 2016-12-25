@@ -1009,7 +1009,7 @@ public class SharpVisitor implements VoidVisitor<Object> {
             }
         }
         printer.print(")");
-
+/* c# don't care about throws, neither do I
         if (!isNullOrEmpty(n.getThrows())) {
             printer.print(" throws ");
             for (final Iterator<ReferenceType> i = n.getThrows().iterator(); i.hasNext();) {
@@ -1019,7 +1019,8 @@ public class SharpVisitor implements VoidVisitor<Object> {
                     printer.print(", ");
                 }
             }
-        }
+        }\
+        */
         printer.print(" ");
         n.getBlock().accept(this, arg);
     }
@@ -1059,7 +1060,7 @@ public class SharpVisitor implements VoidVisitor<Object> {
         for (int i = 0; i < n.getArrayCount(); i++) {
             printer.print("[]");
         }
-
+        /*
         if (!isNullOrEmpty(n.getThrows())) {
             printer.print(" throws ");
             for (final Iterator<ReferenceType> i = n.getThrows().iterator(); i.hasNext();) {
@@ -1069,7 +1070,7 @@ public class SharpVisitor implements VoidVisitor<Object> {
                     printer.print(", ");
                 }
             }
-        }
+        }*/
         if (n.getBody() == null) {
             printer.print(";");
         } else {
