@@ -252,6 +252,7 @@ public class SharpVisitor implements VoidVisitor<Object> {
 
         if (n.getPackage() != null) {
             n.getPackage().accept(this, arg);
+            printer.indent();
         }
 
         if (!isNullOrEmpty(n.getTypes())) {
@@ -262,6 +263,11 @@ public class SharpVisitor implements VoidVisitor<Object> {
                     printer.printLn();
                 }
             }
+        }
+
+        if (n.getPackage() != null) {
+            printer.unindent();
+            printer.printLn("}");
         }
 
         printOrphanCommentsEnding(n);
