@@ -257,9 +257,9 @@ public class SharpVisitor implements VoidVisitor<Object> {
     }
 
     private void printJavaComment(final Comment javacomment, final Object arg) {
-        if (javacomment != null) {
+        /*if (javacomment != null) {
             javacomment.accept(this, arg);
-        }
+        }*/
     }
 
     // this is where we take the very first step!
