@@ -24,6 +24,7 @@
 
 
 import com.github.javaparser.ast.*;
+import com.github.javaparser.ast.TypeParameter;
 import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.comments.BlockComment;
 import com.github.javaparser.ast.comments.Comment;
@@ -34,9 +35,7 @@ import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 import static com.github.javaparser.PositionUtils.sortByBeginPosition;
 import static com.github.javaparser.ast.internal.Utils.isNullOrEmpty;
@@ -1656,6 +1655,12 @@ public class SharpVisitor implements VoidVisitor<Object> {
         for (int i=0; i<commentsAtEnd; i++){
             everything.get(everything.size()-commentsAtEnd+i).accept(this, null);
         }
+    }
+
+    private Dictionary<String, String> conflictingKeywordResolver = new Hashtable<String, String>();
+    private void resolveConflictingKeywords(Expression e){
+        System.out.println();
+
     }
 }
 
