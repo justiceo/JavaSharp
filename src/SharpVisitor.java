@@ -175,6 +175,14 @@ public class SharpVisitor implements VoidVisitor<Object> {
         }
     }
 
+    private void printAnnotationsToModifiers(List<AnnotationExpr> annotations, Object arg) {
+        for (final AnnotationExpr a : annotations) {
+            if(a.getName().toString().equals("Override")) {
+                printer.print("override ");
+            }
+        }
+    }
+
     private void printAnnotations(final List<AnnotationExpr> annotations, final Object arg) {
         if (!isNullOrEmpty(annotations)) {
             for (final AnnotationExpr a : annotations) {
@@ -1005,11 +1013,12 @@ public class SharpVisitor implements VoidVisitor<Object> {
 
         printJavaComment(n.getComment(), arg);
         printJavadoc(n.getJavaDoc(), arg);
-        printMemberAnnotations(n.getAnnotations(), arg);
+        //printMemberAnnotations(n.getAnnotations(), arg);
         printModifiers(n.getModifiers());
         if (n.isDefault()) {
             printer.print("default ");
         }
+        printAnnotationsToModifiers(n.getAnnotations(), arg);
         printTypeParameters(n.getTypeParameters(), arg);
         if (!isNullOrEmpty(n.getTypeParameters())) {
             printer.print(" ");
