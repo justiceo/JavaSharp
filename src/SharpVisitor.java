@@ -113,10 +113,10 @@ public class SharpVisitor implements VoidVisitor<Object> {
         }
     }
 
-    private final SourcePrinter printer = createSourcePrinter();
+    private final com.github.javaparser.ast.visitor.DumpVisitor.SourcePrinter printer = createSourcePrinter();
 
-    protected SourcePrinter createSourcePrinter() {
-        return new SourcePrinter("    ");
+    protected com.github.javaparser.ast.visitor.DumpVisitor.SourcePrinter createSourcePrinter() {
+        return new com.github.javaparser.ast.visitor.DumpVisitor.SourcePrinter("    ");
     }
 
     public String getSource() {
@@ -140,7 +140,7 @@ public class SharpVisitor implements VoidVisitor<Object> {
             printer.print("static ");
         }
         if (ModifierSet.isFinal(modifiers)) {
-            printer.print("sealed/readonly ");
+            printer.print("final ");
         }
         if (ModifierSet.isNative(modifiers)) {
             printer.print("native ");
@@ -269,9 +269,9 @@ public class SharpVisitor implements VoidVisitor<Object> {
     @Override public void visit(final PackageDeclaration n, final Object arg) {
         printJavaComment(n.getComment(), arg);
         printAnnotations(n.getAnnotations(), arg);
-        printer.print("namespace ");
+        printer.print("package ");
         n.getName().accept(this, arg);
-        printer.print(" {");
+        printer.printLn(";");
         printer.printLn();
 
         printOrphanCommentsEnding(n);
@@ -296,7 +296,7 @@ public class SharpVisitor implements VoidVisitor<Object> {
     @Override public void visit(final ImportDeclaration n, final Object arg) {
         printJavaComment(n.getComment(), arg);
         if (!n.isEmptyImportDeclaration()) {
-            printer.print("using ");
+            printer.print("import ");
             if (n.isStatic()) {
                 printer.print("static ");
             }
