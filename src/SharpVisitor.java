@@ -459,7 +459,7 @@ public class SharpVisitor implements VoidVisitor<Object> {
         }
         switch (n.getType()) {
             case Boolean:
-                printer.print("boolean");
+                printer.print("bool");
                 break;
             case Byte:
                 printer.print("byte");
@@ -840,7 +840,7 @@ public class SharpVisitor implements VoidVisitor<Object> {
     @Override public void visit(final InstanceOfExpr n, final Object arg) {
         printJavaComment(n.getComment(), arg);
         n.getExpr().accept(this, arg);
-        printer.print(" instanceof ");
+        printer.print(" is ");
         n.getType().accept(this, arg);
     }
 
