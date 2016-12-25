@@ -21,22 +21,23 @@ public class OmniJava {
         // parse the file
         CompilationUnit cu = JavaParser.parse(in);
 
+        String cuStr = performRegexTransforms(myvisitor(cu));
+
         // prints the resulting compilation unit to default system output
-        //System.out.println(cu.toString());
-        myvisitor(cu);
+        System.out.println(cuStr);
 
-        //new MethodVisitor().visit(cu, null);
-
-        // visit and change the methods names and parameters
-        //new MethodChangerVisitor().visit(cu, null);
-
-        //System.out.println(cu.toString());
     }
 
-    private static void myvisitor(CompilationUnit cu) {
+    private static String performRegexTransforms(String cuStr) {
+        cuStr = cuStr.replaceAll("\\bString\\b", "string"); // since String is a keyword, this is save
+        cuStr = cuStr.replaceAll("\\btoString()\\b", "ToString");
+        return cuStr;
+    }
+
+    private static String myvisitor(CompilationUnit cu) {
         SharpVisitor dv = new SharpVisitor();
         cu.accept(dv, null);
-        System.out.println(dv.getSource());
+        return dv.getSource();
     }
 
     /**
@@ -81,4 +82,6 @@ public class OmniJava {
             }
         }
     }
+
+
 }
