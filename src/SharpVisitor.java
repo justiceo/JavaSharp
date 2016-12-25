@@ -270,9 +270,9 @@ public class SharpVisitor implements VoidVisitor<Object> {
     @Override public void visit(final PackageDeclaration n, final Object arg) {
         printJavaComment(n.getComment(), arg);
         printAnnotations(n.getAnnotations(), arg);
-        printer.print("package ");
+        printer.print("namespace ");
         n.getName().accept(this, arg);
-        printer.printLn(";");
+        printer.printLn(" {");
         printer.printLn();
 
         printOrphanCommentsEnding(n);
@@ -297,7 +297,7 @@ public class SharpVisitor implements VoidVisitor<Object> {
     @Override public void visit(final ImportDeclaration n, final Object arg) {
         printJavaComment(n.getComment(), arg);
         if (!n.isEmptyImportDeclaration()) {
-            printer.print("import ");
+            printer.print("using ");
             if (n.isStatic()) {
                 printer.print("static ");
             }
