@@ -139,13 +139,13 @@ public class SharpVisitor implements VoidVisitor<Object> {
             printer.print("static ");
         }
         if (ModifierSet.isFinal(modifiers)) {
-            printer.print("final ");
+            printer.print("readonly ");
         }
         if (ModifierSet.isNative(modifiers)) {
             printer.print("native ");
         }
         if (ModifierSet.isStrictfp(modifiers)) {
-            printer.print("strictfp ");
+            // do nothing
         }
         if (ModifierSet.isSynchronized(modifiers)) {
             printer.print("synchronized ");
