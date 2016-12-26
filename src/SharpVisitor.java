@@ -402,7 +402,7 @@ public class SharpVisitor implements VoidVisitor<Object> {
     @Override public void visit(final JavadocComment n, final Object arg) {
         printer.print("///<summary>");
         printer.print(n.getContent().replace("\n", "\n///"));
-        printer.printLn("///</summary>");
+        printer.printLn("</summary>");
     }
 
     @Override public void visit(final ClassOrInterfaceType n, final Object arg) {
