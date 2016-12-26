@@ -148,10 +148,10 @@ public class SharpVisitor implements VoidVisitor<Object> {
             // do nothing
         }
         if (ModifierSet.isSynchronized(modifiers)) {
-            printer.print("synchronized ");
+            // do nothing
         }
         if (ModifierSet.isTransient(modifiers)) {
-            printer.print("transient ");
+            // do nothing
         }
         if (ModifierSet.isVolatile(modifiers)) {
             printer.print("volatile ");
@@ -163,14 +163,23 @@ public class SharpVisitor implements VoidVisitor<Object> {
             printModifiers(modifiers);
             return;
         }
-        if(type instanceof FieldDeclaration || type instanceof VariableDeclarationExpr) {
+        if (type instanceof FieldDeclaration || type instanceof VariableDeclarationExpr) {
             printer.print("readonly ");
-        }
-        else if (type instanceof BaseParameter) { // catch Parameter & multi-type param
+        } else if (type instanceof BaseParameter) { // catch Parameter & multi-type param
             // do nothing
-        }
-        else {
+        } else {
             printer.print("sealed ");
+        }
+    }
+
+    private void printModifiersToAnnotations(int modifiers, Object arg) {
+
+        // don't forget to remove any modifier printed here from printModifiers()
+        if (ModifierSet.isSynchronized(modifiers)) {
+            printer.printLn("[MethodImpl(MethodImplOptions.Synchronized)]");
+        }
+        if (ModifierSet.isTransient(modifiers)) {
+            printer.printLn("[ScriptIgnore]");
         }
     }
 
@@ -1036,6 +1045,7 @@ public class SharpVisitor implements VoidVisitor<Object> {
         printJavaComment(n.getComment(), arg);
         printJavadoc(n.getJavaDoc(), arg);
         printMemberAnnotations(n.getAnnotations(), arg);
+        printModifiersToAnnotations(n.getModifiers(), arg);
         printModifiers(n.getModifiers(), n);
         if (n.isDefault()) {
             printer.print("default ");
@@ -1131,6 +1141,7 @@ public class SharpVisitor implements VoidVisitor<Object> {
     @Override public void visit(final VariableDeclarationExpr n, final Object arg) {
         printJavaComment(n.getComment(), arg);
         printAnnotations(n.getAnnotations(), arg);
+        printModifiersToAnnotations(n.getModifiers(), arg);
         printModifiers(n.getModifiers());
 
         n.getType().accept(this, arg);
