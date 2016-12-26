@@ -139,7 +139,7 @@ public class SharpVisitor implements VoidVisitor<Object> {
             printer.print("static ");
         }
         if (ModifierSet.isFinal(modifiers)) {
-            printer.print("readonly ");
+            // do nothing
         }
         if (ModifierSet.isNative(modifiers)) {
             printer.print("native ");
@@ -164,10 +164,13 @@ public class SharpVisitor implements VoidVisitor<Object> {
             return;
         }
         if (type instanceof FieldDeclaration || type instanceof VariableDeclarationExpr) {
+            printModifiers(modifiers);
             printer.print("readonly ");
         } else if (type instanceof BaseParameter) { // catch Parameter & multi-type param
+            printModifiers(modifiers);
             // do nothing
         } else {
+            printModifiers(modifiers);
             printer.print("sealed ");
         }
     }
