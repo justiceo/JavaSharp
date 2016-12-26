@@ -201,6 +201,10 @@ public class SharpVisitor implements VoidVisitor<Object> {
                 if(a.getName().toString().equals("Override")) {
                     continue;
                 }
+                if(a.getName().toString().equals("Deprecated")) {
+                    printer.printLn("[Obsolete] ");
+                    continue;
+                }
                 a.accept(this, arg);
                 printer.printLn();
             }
@@ -583,6 +587,7 @@ public class SharpVisitor implements VoidVisitor<Object> {
         printJavaComment(n.getComment(), arg);
         printJavadoc(n.getJavaDoc(), arg);
         printMemberAnnotations(n.getAnnotations(), arg);
+        printModifiersToAnnotations(n.getModifiers(), arg);
         printModifiers(n.getModifiers(), n);
         n.getType().accept(this, arg);
 
