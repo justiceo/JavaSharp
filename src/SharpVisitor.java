@@ -185,6 +185,7 @@ public class SharpVisitor implements VoidVisitor<Object> {
     private void printMemberAnnotations(final List<AnnotationExpr> annotations, final Object arg) {
         if (!isNullOrEmpty(annotations)) {
             for (final AnnotationExpr a : annotations) {
+                // any annotation removed should be added elsewhere or commented out unless unnecessary
                 if(a.getName().toString().equals("Override")) {
                     continue;
                 }
@@ -196,6 +197,7 @@ public class SharpVisitor implements VoidVisitor<Object> {
 
     private void printAnnotationsToModifiers(List<AnnotationExpr> annotations, Object arg) {
         for (final AnnotationExpr a : annotations) {
+            // any annotation converted should be removed from printMemberAnnotations()
             if(a.getName().toString().equals("Override")) {
                 printer.print("override ");
             }
