@@ -1459,7 +1459,7 @@ public class SharpVisitor implements VoidVisitor<Object> {
 
     @Override public void visit(final SynchronizedStmt n, final Object arg) {
         printJavaComment(n.getComment(), arg);
-        printer.print("synchronized (");
+        printer.print("lock (");
         n.getExpr().accept(this, arg);
         printer.print(") ");
         n.getBlock().accept(this, arg);
