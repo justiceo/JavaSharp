@@ -1106,11 +1106,15 @@ public class SharpVisitor implements VoidVisitor<Object> {
         printJavaComment(n.getComment(), arg);
         printAnnotations(n.getAnnotations(), arg);
         printModifiers(n.getModifiers());
+
+        if (n.isVarArgs()) {
+            printer.print("params ");
+        }
         if (n.getType() != null) {
             n.getType().accept(this, arg);
         }
         if (n.isVarArgs()) {
-            printer.print("...");
+            printer.print("[]");
         }
         printer.print(" ");
         n.getId().accept(this, arg);
