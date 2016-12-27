@@ -16,12 +16,14 @@ public class OmniJava {
 
     public static void main(String[] args) throws Exception {
         // creates an input stream for the file to be parsed
-        FileInputStream in = new FileInputStream("jsoup-source/org/jsoup/Jsoup.java");
+        FileInputStream in = new FileInputStream("D:\\Code\\IdeaProjects\\Omni-java\\commons-lang\\StringUtils.java");
 
         // parse the file
         CompilationUnit cu = JavaParser.parse(in);
 
-        String cuStr = performRegexTransforms(myvisitor(cu));
+
+        refactorVisitor(cu);
+        String cuStr = performRegexTransforms(printVisitor(cu));
 
         // prints the resulting compilation unit to default system output
         System.out.println(cuStr);
@@ -34,8 +36,14 @@ public class OmniJava {
         return cuStr;
     }
 
-    private static String myvisitor(CompilationUnit cu) {
+    private static String printVisitor(CompilationUnit cu) {
         SharpVisitor dv = new SharpVisitor();
+        cu.accept(dv, null);
+        return dv.getSource();
+    }
+
+    private static String refactorVisitor(CompilationUnit cu) {
+        RefactorVisitor dv = new RefactorVisitor();
         cu.accept(dv, null);
         return dv.getSource();
     }
