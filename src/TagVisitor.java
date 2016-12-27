@@ -23,6 +23,8 @@
  */
 
 
+import com.github.javaparser.ast.ImportDeclaration;
+import com.github.javaparser.ast.PackageDeclaration;
 import com.github.javaparser.ast.TypeParameter;
 import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.comments.Comment;
@@ -38,6 +40,22 @@ import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
  * @author Julio Vilmar Gesser
  */
 public class TagVisitor extends VoidVisitorAdapter<Object> {
+
+    @Override public void visit(final PackageDeclaration n, final Object arg) {
+        n.getName().setName(n.getName()+ "_PackageDeclaration");
+        visitComment(n.getComment(), arg);
+        if (n.getAnnotations() != null) {
+            for (final AnnotationExpr a : n.getAnnotations()) {
+                a.accept(this, arg);
+            }
+        }
+    }
+
+    @Override public void visit(final ImportDeclaration n, final Object arg) {
+        n.getName().setName(n.getName()+ "_ImportDeclaration");
+        visitComment(n.getComment(), arg);
+        n.getName().accept(this, arg);
+    }
 
     @Override public void visit(final NameExpr n, final Object arg) {
         n.setName(n.getName()+ "_NameExpr");
@@ -59,7 +77,7 @@ public class TagVisitor extends VoidVisitorAdapter<Object> {
         for (final AnnotationExpr a : n.getAnnotations()) {
             a.accept(this, arg);
         }
-        n.getNameExpr().accept(this, arg);
+        //n.getNameExpr().accept(this, arg);
         for (final TypeParameter t : n.getTypeParameters()) {
             t.accept(this, arg);
         }
@@ -113,7 +131,7 @@ public class TagVisitor extends VoidVisitorAdapter<Object> {
                 t.accept(this, arg);
             }
         }
-        n.getNameExpr().accept(this, arg);
+        //n.getNameExpr().accept(this, arg);
         if (n.getArgs() != null) {
             for (final Expression e : n.getArgs()) {
                 e.accept(this, arg);
@@ -137,7 +155,7 @@ public class TagVisitor extends VoidVisitorAdapter<Object> {
                 t.accept(this, arg);
             }
         }
-        n.getNameExpr().accept(this, arg);
+        //n.getNameExpr().accept(this, arg);
         if (n.getParameters() != null) {
             for (final Parameter p : n.getParameters()) {
                 p.accept(this, arg);
@@ -168,7 +186,7 @@ public class TagVisitor extends VoidVisitorAdapter<Object> {
             }
         }
         n.getType().accept(this, arg);
-        n.getNameExpr().accept(this, arg);
+        //n.getNameExpr().accept(this, arg);
         if (n.getParameters() != null) {
             for (final Parameter p : n.getParameters()) {
                 p.accept(this, arg);
@@ -195,7 +213,7 @@ public class TagVisitor extends VoidVisitorAdapter<Object> {
                 a.accept(this, arg);
             }
         }
-        n.getNameExpr().accept(this, arg);
+        //n.getNameExpr().accept(this, arg);
         if (n.getImplements() != null) {
             for (final ClassOrInterfaceType c : n.getImplements()) {
                 c.accept(this, arg);
@@ -247,7 +265,7 @@ public class TagVisitor extends VoidVisitorAdapter<Object> {
                 a.accept(this, arg);
             }
         }
-        n.getNameExpr().accept(this, arg);
+        //n.getNameExpr().accept(this, arg);
         if (n.getMembers() != null) {
             for (final BodyDeclaration member : n.getMembers()) {
                 member.accept(this, arg);
