@@ -45,15 +45,15 @@ import static com.github.javaparser.ast.internal.Utils.isNullOrEmpty;
  *
  * @author Julio Vilmar Gesser
  */
-public class SharpVisitor implements VoidVisitor<Object> {
+public class CSharpPrintVisitor implements VoidVisitor<Object> {
 
     private boolean printComments;
 
-    public SharpVisitor() {
+    public CSharpPrintVisitor() {
         this(true);
     }
 
-    public SharpVisitor(boolean printComments) {
+    public CSharpPrintVisitor(boolean printComments) {
         this.printComments = printComments;
     }
 
