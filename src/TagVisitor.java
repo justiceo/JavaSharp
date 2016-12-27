@@ -41,7 +41,7 @@ import static com.github.javaparser.ast.internal.Utils.isNullOrEmpty;
  *
  * @author Julio Vilmar Gesser
  */
-public class RefactorVisitor extends VoidVisitorAdapter<Object> {
+public class TagVisitor extends VoidVisitorAdapter<Object> {
 
     @Override public void visit(final NameExpr n, final Object arg) {
         n.setName(n.getName()+ "_NameExpr");
