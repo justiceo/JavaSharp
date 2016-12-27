@@ -43,7 +43,7 @@ public class OmniJava {
     }
 
     private static void refactorVisitor(CompilationUnit cu) {
-        RefactorVisitor dv = new RefactorVisitor();
+        TagVisitor dv = new TagVisitor();
         cu.accept(dv, null);
     }
 
