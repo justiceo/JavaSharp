@@ -356,109 +356,32 @@ public class RefactorVisitor implements VoidVisitor<Object> {
         }
     }
 
-    @Override public void visit(final PrimitiveType n, final Object arg) {
-        printJavaComment(n.getComment(), arg);
-        if (!isNullOrEmpty(n.getAnnotations())) {
-            for (AnnotationExpr ae : n.getAnnotations()) {
-                ae.accept(this, arg);
-                printer.print(" ");
-            }
-        }
-        switch (n.getType()) {
-            case Boolean:
-                printer.print("bool");
-                break;
-            case Byte:
-                printer.print("byte");
-                break;
-            case Char:
-                printer.print("char");
-                break;
-            case Double:
-                printer.print("double");
-                break;
-            case Float:
-                printer.print("float");
-                break;
-            case Int:
-                printer.print("int");
-                break;
-            case Long:
-                printer.print("long");
-                break;
-            case Short:
-                printer.print("short");
-                break;
-        }
+    @Override public void visit(final PrimitiveType n, final Object arg) {        
+        
     }
 
-    @Override public void visit(final ReferenceType n, final Object arg) {
-        printJavaComment(n.getComment(), arg);
-        if (!isNullOrEmpty(n.getAnnotations())) {
-            for (AnnotationExpr ae : n.getAnnotations()) {
-                ae.accept(this, arg);
-                printer.print(" ");
-            }
-        }
-        n.getType().accept(this, arg);
-        List<List<AnnotationExpr>> arraysAnnotations = n.getArraysAnnotations();
-        for (int i = 0; i < n.getArrayCount(); i++) {
-            if (arraysAnnotations != null && i < arraysAnnotations.size()) {
-                List<AnnotationExpr> annotations = arraysAnnotations.get(i);
-                if (!isNullOrEmpty(annotations)) {
-                    for (AnnotationExpr ae : annotations) {
-                        printer.print(" ");
-                        ae.accept(this, arg);
-
-                    }
-                }
-            }
-            printer.print("[]");
-        }
+    @Override public void visit(final ReferenceType n, final Object arg) {        
+        n.getType().accept(this, arg);        
     }
 
     @Override public void visit(final IntersectionType n, final Object arg) {
-        printJavaComment(n.getComment(), arg);
-        boolean isFirst = true;
         for (ReferenceType element : n.getElements()) {
             element.accept(this, arg);
-            if (isFirst) {
-                isFirst = false;
-            } else {
-                printer.print(" & ");
-            }
         }
     }
 
     @Override public void visit(final UnionType n, final Object arg) {
-        printJavaComment(n.getComment(), arg);
-        boolean isFirst = true;
         for (ReferenceType element : n.getElements()) {
-            if (isFirst) {
-                isFirst = false;
-            } else {
-                printer.print(" | ");
-            }
             element.accept(this, arg);
         }
     }
 
 
-    @Override public void visit(final WildcardType n, final Object arg) {
-        printJavaComment(n.getComment(), arg);
-        if (n.getAnnotations() != null) {
-            for (AnnotationExpr ae : n.getAnnotations()) {
-                printer.print(" ");
-                ae.accept(this, arg);
-            }
-        }
-        printer.print("?");
+    @Override public void visit(final WildcardType n, final Object arg) {        
         if (n.getExtends() != null) {
-            printer.print(" extends ");
             n.getExtends().accept(this, arg);
         }
         if (n.getSuper() != null) {
-            printer.print(" super ");
             n.getSuper().accept(this, arg);
         }
     }
@@ -468,77 +391,42 @@ public class RefactorVisitor implements VoidVisitor<Object> {
     }
 
     @Override public void visit(final FieldDeclaration n, final Object arg) {
-        printOrphanCommentsBeforeThisChildNode(n);
-
-        printJavaComment(n.getComment(), arg);
-        printJavadoc(n.getJavaDoc(), arg);
-        printMemberAnnotations(n.getAnnotations(), arg);
-        printModifiersToAnnotations(n.getModifiers(), arg);
-        printModifiers(n.getModifiers(), n);
         n.getType().accept(this, arg);
-
-        printer.print(" ");
         for (final Iterator<VariableDeclarator> i = n.getVariables().iterator(); i.hasNext();) {
             final VariableDeclarator var = i.next();
             var.accept(this, arg);
-            if (i.hasNext()) {
-                printer.print(", ");
-            }
         }
-
-        printer.print(";");
     }
 
     @Override public void visit(final VariableDeclarator n, final Object arg) {
-        printJavaComment(n.getComment(), arg);
         n.getId().accept(this, arg);
         if (n.getInit() != null) {
-            printer.print(" = ");
             n.getInit().accept(this, arg);
         }
     }
 
     @Override public void visit(final VariableDeclaratorId n, final Object arg) {
-        printJavaComment(n.getComment(), arg);
-        printer.print(n.getName());
-        for (int i = 0; i < n.getArrayCount(); i++) {
-            printer.print("[]");
-        }
+        n.setName((n.getName() + "_VarDecatorId");
     }
 
     @Override public void visit(final ArrayInitializerExpr n, final Object arg) {
-        printJavaComment(n.getComment(), arg);
-        printer.print("{");
         if (!isNullOrEmpty(n.getValues())) {
-            printer.print(" ");
             for (final Iterator<Expression> i = n.getValues().iterator(); i.hasNext();) {
                 final Expression expr = i.next();
                 expr.accept(this, arg);
-                if (i.hasNext()) {
-                    printer.print(", ");
-                }
             }
-            printer.print(" ");
         }
-        printer.print("}");
     }
 
     @Override public void visit(final VoidType n, final Object arg) {
-        printJavaComment(n.getComment(), arg);
-        printer.print("void");
     }
 
     @Override public void visit(final ArrayAccessExpr n, final Object arg) {
-        printJavaComment(n.getComment(), arg);
         n.getName().accept(this, arg);
-        printer.print("[");
         n.getIndex().accept(this, arg);
-        printer.print("]");
     }
 
     @Override public void visit(final ArrayCreationExpr n, final Object arg) {
-        printJavaComment(n.getComment(), arg);
-        printer.print("new ");
         n.getType().accept(this, arg);
         List<List<AnnotationExpr>> arraysAnnotations = n.getArraysAnnotations();
         if (!isNullOrEmpty(n.getDimensions())) {
@@ -640,102 +528,29 @@ public class RefactorVisitor implements VoidVisitor<Object> {
     }
 
     @Override public void visit(final BinaryExpr n, final Object arg) {
-        printJavaComment(n.getComment(), arg);
         n.getLeft().accept(this, arg);
-        printer.print(" ");
-        switch (n.getOperator()) {
-            case or:
-                printer.print("||");
-                break;
-            case and:
-                printer.print("&&");
-                break;
-            case binOr:
-                printer.print("|");
-                break;
-            case binAnd:
-                printer.print("&");
-                break;
-            case xor:
-                printer.print("^");
-                break;
-            case equals:
-                printer.print("==");
-                break;
-            case notEquals:
-                printer.print("!=");
-                break;
-            case less:
-                printer.print("<");
-                break;
-            case greater:
-                printer.print(">");
-                break;
-            case lessEquals:
-                printer.print("<=");
-                break;
-            case greaterEquals:
-                printer.print(">=");
-                break;
-            case lShift:
-                printer.print("<<");
-                break;
-            case rSignedShift:
-                printer.print(">>");
-                break;
-            case rUnsignedShift:
-                printer.print(">>>");
-                break;
-            case plus:
-                printer.print("+");
-                break;
-            case minus:
-                printer.print("-");
-                break;
-            case times:
-                printer.print("*");
-                break;
-            case divide:
-                printer.print("/");
-                break;
-            case remainder:
-                printer.print("%");
-                break;
-        }
-        printer.print(" ");
         n.getRight().accept(this, arg);
     }
 
     @Override public void visit(final CastExpr n, final Object arg) {
-        printJavaComment(n.getComment(), arg);
-        printer.print("(");
         n.getType().accept(this, arg);
-        printer.print(") ");
         n.getExpr().accept(this, arg);
     }
 
     @Override public void visit(final ClassExpr n, final Object arg) {
-        printJavaComment(n.getComment(), arg);
         n.getType().accept(this, arg);
-        printer.print(".class");
     }
 
     @Override public void visit(final ConditionalExpr n, final Object arg) {
-        printJavaComment(n.getComment(), arg);
         n.getCondition().accept(this, arg);
-        printer.print(" ? ");
         n.getThenExpr().accept(this, arg);
-        printer.print(" : ");
         n.getElseExpr().accept(this, arg);
     }
 
     @Override public void visit(final EnclosedExpr n, final Object arg) {
-        printJavaComment(n.getComment(), arg);
-        printer.print("(");
         if (n.getInner() != null) {
             n.getInner().accept(this, arg);
         }
-        printer.print(")");
     }
 
     @Override public void visit(final FieldAccessExpr n, final Object arg) {
