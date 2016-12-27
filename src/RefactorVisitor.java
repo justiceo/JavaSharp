@@ -285,80 +285,27 @@ public class RefactorVisitor implements VoidVisitor<Object> {
 
     // this is where we take the very first step!
     @Override public void visit(final CompilationUnit n, final Object arg) {
-        printJavaComment(n.getComment(), arg);
-
-        if (!isNullOrEmpty(n.getImports())) {
-            for (final ImportDeclaration i : n.getImports()) {
-                i.accept(this, arg);
-            }
-            printer.printLn();
-        }
-
-        if (n.getPackage() != null) {
-            n.getPackage().accept(this, arg);
-            printer.indent();
-        }
 
         if (!isNullOrEmpty(n.getTypes())) {
             for (final Iterator<TypeDeclaration> i = n.getTypes().iterator(); i.hasNext();) {
                 i.next().accept(this, arg);
-                printer.printLn();
-                if (i.hasNext()) {
-                    printer.printLn();
-                }
             }
         }
-
-        if (n.getPackage() != null) {
-            printer.unindent();
-            printer.printLn("}");
-        }
-
-        printOrphanCommentsEnding(n);
     }
 
-    @Override public void visit(final PackageDeclaration n, final Object arg) {
-        printJavaComment(n.getComment(), arg);
-        printAnnotations(n.getAnnotations(), arg);
-        printer.print("namespace ");
-        n.getName().accept(this, arg);
-        printer.printLn(" {");
-        printer.printLn();
-
-        printOrphanCommentsEnding(n);
-    }
+    @Override public void visit(final PackageDeclaration n, final Object arg) { }
 
     @Override public void visit(final NameExpr n, final Object arg) {
-        printJavaComment(n.getComment(), arg);
-        printer.print(n.getName());
-
-        printOrphanCommentsEnding(n);
+        // check and set
+        n.setName(n.getName()+ "_NameExpr");
     }
 
     @Override public void visit(final QualifiedNameExpr n, final Object arg) {
-        printJavaComment(n.getComment(), arg);
         n.getQualifier().accept(this, arg);
-        printer.print(".");
-        printer.print(n.getName());
-
-        printOrphanCommentsEnding(n);
+        n.setName(n.getName()+ "_QNameExpr");
     }
 
     @Override public void visit(final ImportDeclaration n, final Object arg) {
-        printJavaComment(n.getComment(), arg);
-        if (!n.isEmptyImportDeclaration()) {
-            printer.print("using ");
-            if (n.isStatic()) {
-                printer.print("static ");
-            }
-            n.getName().accept(this, arg);
-            if (n.isAsterisk()) {
-                printer.print(".*");
-            }
-        }
-        printer.printLn(";");
-
-        printOrphanCommentsEnding(n);
     }
 
     @Override public void visit(final ClassOrInterfaceDeclaration n, final Object arg) {
@@ -385,59 +332,26 @@ public class RefactorVisitor implements VoidVisitor<Object> {
     }
 
     @Override public void visit(final EmptyTypeDeclaration n, final Object arg) {
-        printJavaComment(n.getComment(), arg);
-        printJavadoc(n.getJavaDoc(), arg);
-        printer.print(";");
-
-        printOrphanCommentsEnding(n);
     }
 
     @Override public void visit(final JavadocComment n, final Object arg) {
-        printer.print("///<summary>");
-        printer.print(n.getContent().replace("\n", "\n///"));
-        printer.printLn("</summary>");
+
     }
 
     @Override public void visit(final ClassOrInterfaceType n, final Object arg) {
-        printJavaComment(n.getComment(), arg);
-
-        if (n.getAnnotations() != null) {
-            for (AnnotationExpr ae : n.getAnnotations()) {
-                ae.accept(this, arg);
-                printer.print(" ");
-            }
-        }
-
+        n.setName(n.getName() + "_CorIType");
         if (n.getScope() != null) {
             n.getScope().accept(this, arg);
-            printer.print(".");
-        }
-        printer.print(n.getName());
-
-        if (n.isUsingDiamondOperator()) {
-            printer.print("<>");
-        } else {
-            printTypeArgs(n.getTypeArgs(), arg);
         }
     }
 
     @Override public void visit(final TypeParameter n, final Object arg) {
-        printJavaComment(n.getComment(), arg);
-        if (n.getAnnotations() != null) {
-            for (AnnotationExpr ann : n.getAnnotations()) {
-                ann.accept(this, arg);
-                printer.print(" ");
-            }
-        }
-        printer.print(n.getName());
+
+        n.setName(n.getName() + "_TypeParameter");
         if (!isNullOrEmpty(n.getTypeBound())) {
-            printer.print(" extends ");
             for (final Iterator<ClassOrInterfaceType> i = n.getTypeBound().iterator(); i.hasNext();) {
                 final ClassOrInterfaceType c = i.next();
                 c.accept(this, arg);
-                if (i.hasNext()) {
-                    printer.print(" & ");
-                }
             }
         }
     }

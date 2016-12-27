@@ -42,10 +42,9 @@ public class OmniJava {
         return dv.getSource();
     }
 
-    private static String refactorVisitor(CompilationUnit cu) {
+    private static void refactorVisitor(CompilationUnit cu) {
         RefactorVisitor dv = new RefactorVisitor();
         cu.accept(dv, null);
-        return dv.getSource();
     }
 
     /**
