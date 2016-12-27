@@ -33,7 +33,7 @@ import com.github.javaparser.ast.comments.LineComment;
 import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
-import com.github.javaparser.ast.visitor.VoidVisitor;
+import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 
 import java.util.*;
 
@@ -45,7 +45,7 @@ import static com.github.javaparser.ast.internal.Utils.isNullOrEmpty;
  *
  * @author Julio Vilmar Gesser
  */
-public class RefactorVisitor implements VoidVisitor<Object> {
+public class RefactorVisitor extends VoidVisitorAdapter<Object> {
 
     private boolean printComments;
 
@@ -406,7 +406,7 @@ public class RefactorVisitor implements VoidVisitor<Object> {
     }
 
     @Override public void visit(final VariableDeclaratorId n, final Object arg) {
-        n.setName((n.getName() + "_VarDecatorId");
+        n.setName(n.getName() + "_VarDecatorId");
     }
 
     @Override public void visit(final ArrayInitializerExpr n, final Object arg) {
@@ -482,48 +482,7 @@ public class RefactorVisitor implements VoidVisitor<Object> {
     }
 
     @Override public void visit(final AssignExpr n, final Object arg) {
-        printJavaComment(n.getComment(), arg);
         n.getTarget().accept(this, arg);
-        printer.print(" ");
-        switch (n.getOperator()) {
-            case assign:
-                printer.print("=");
-                break;
-            case and:
-                printer.print("&=");
-                break;
-            case or:
-                printer.print("|=");
-                break;
-            case xor:
-                printer.print("^=");
-                break;
-            case plus:
-                printer.print("+=");
-                break;
-            case minus:
-                printer.print("-=");
-                break;
-            case rem:
-                printer.print("%=");
-                break;
-            case slash:
-                printer.print("/=");
-                break;
-            case star:
-                printer.print("*=");
-                break;
-            case lShift:
-                printer.print("<<=");
-                break;
-            case rSignedShift:
-                printer.print(">>=");
-                break;
-            case rUnsignedShift:
-                printer.print(">>>=");
-                break;
-        }
-        printer.print(" ");
         n.getValue().accept(this, arg);
     }
 
