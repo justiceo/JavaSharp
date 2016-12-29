@@ -50,6 +50,8 @@ public class CSharpPrintVisitor implements VoidVisitor<Object> {
     public static boolean UseJavaDoc;
     private boolean printComments;
 
+    private static String typeBounds = "";
+
     public CSharpPrintVisitor() {
         this(true);
     }
@@ -466,12 +468,13 @@ public class CSharpPrintVisitor implements VoidVisitor<Object> {
         }
         printer.print(n.getName());
         if (!isNullOrEmpty(n.getTypeBound())) {
-            printer.print(" extends ");
+            typeBounds = " where " + n.getName() + " : ";
+            //printer.print(" where " + n.getName() + " : "); //extends
             for (final Iterator<ClassOrInterfaceType> i = n.getTypeBound().iterator(); i.hasNext();) {
                 final ClassOrInterfaceType c = i.next();
-                c.accept(this, arg);
+                typeBounds += c.getName();
                 if (i.hasNext()) {
-                    printer.print(" & ");
+                    typeBounds += ", ";
                 }
             }
         }
@@ -1066,14 +1069,12 @@ public class CSharpPrintVisitor implements VoidVisitor<Object> {
             printer.print("default ");
         }
         printAnnotationsToModifiers(n.getAnnotations(), arg);
-        printTypeParameters(n.getTypeParameters(), arg);
-        if (!isNullOrEmpty(n.getTypeParameters())) {
-            printer.print(" ");
-        }
 
-        n.getType().accept(this, arg);
+
+        n.getType().accept(this, arg);      // prints T
         printer.print(" ");
-        printer.print(n.getName());
+        printer.print(n.getName());         // methodName
+        printTypeParameters(n.getTypeParameters(), arg); // prints <T, K> ignore extends clause
 
         printer.print("(");
         if (!isNullOrEmpty(n.getParameters())) {
@@ -1086,6 +1087,12 @@ public class CSharpPrintVisitor implements VoidVisitor<Object> {
             }
         }
         printer.print(")");
+
+        // if has type parameters, print where clause here
+        if(!typeBounds.isEmpty()) {
+            printer.print(typeBounds);
+            typeBounds = "";
+        }
 
         for (int i = 0; i < n.getArrayCount(); i++) {
             printer.print("[]");
