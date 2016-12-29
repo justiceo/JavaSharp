@@ -10,11 +10,12 @@ public class OmniJava {
 
     public static void main(String[] args) throws Exception {
         // creates an input stream for the file to be parsed
-        FileInputStream in = new FileInputStream("D:\\Code\\IdeaProjects\\Omni-java\\jsoup-source\\org\\jsoup\\Jsoup.java");
+        FileInputStream in = new FileInputStream("D:\\Code\\IdeaProjects\\Omni-java\\commons-lang\\ArrayUtils.java");
 
         // parse the file
         CompilationUnit cu = JavaParser.parse(in);
 
+        RefactorVisitor.SetBasePackage("org.apache.commons.lang3", "CommonsLang");
         RefactorVisitor rv = new RefactorVisitor();
         cu.accept(rv, null);
 
@@ -33,6 +34,7 @@ public class OmniJava {
     }
 
     private static String printVisitor(CompilationUnit cu) {
+        CSharpPrintVisitor.UseJavaDoc = true;
         CSharpPrintVisitor dv = new CSharpPrintVisitor();
         cu.accept(dv, null);
         return dv.getSource();

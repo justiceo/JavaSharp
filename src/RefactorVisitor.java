@@ -22,6 +22,8 @@ import java.util.HashSet;
 public class RefactorVisitor extends VoidVisitorAdapter<Object> {
 
     private final HashSet<String> reserved;
+    private static String oldSuffix = "";
+    private static String newSuffix = "";
 
     public RefactorVisitor() throws IOException, URISyntaxException {
         URI uri = getClass().getResource("/reserved_keywords.txt").toURI();
@@ -29,7 +31,9 @@ public class RefactorVisitor extends VoidVisitorAdapter<Object> {
     }
 
     @Override public void visit(final PackageDeclaration n, final Object arg) {
-        if(reserved.contains(n.getName())) n.getName().setName(hash(n.getName()));
+        String name = n.getName().toString().replace(this.oldSuffix, this.newSuffix);
+        name = toPackageTitleCase(name);
+        n.setName(new NameExpr(n.getRange(), name));
         visitComment(n.getComment(), arg);
         if (n.getAnnotations() != null) {
             for (final AnnotationExpr a : n.getAnnotations()) {
@@ -39,7 +43,9 @@ public class RefactorVisitor extends VoidVisitorAdapter<Object> {
     }
 
     @Override public void visit(final ImportDeclaration n, final Object arg) {
-        if(reserved.contains(n.getName())) n.getName().setName(hash(n.getName()));
+        String name = n.getName().toString().replace(this.oldSuffix, this.newSuffix);
+        name = toPackageTitleCase(name);
+        n.setName(new NameExpr(n.getRange(), name));
         visitComment(n.getComment(), arg);
     }
 
@@ -294,5 +300,27 @@ public class RefactorVisitor extends VoidVisitorAdapter<Object> {
 
     private String hash(String str) {
         return str + "_";
+    }
+
+    public static String toPackageTitleCase(String input) {
+        StringBuilder titleCase = new StringBuilder();
+        boolean nextTitleCase = true;
+
+        for (char c : input.toCharArray()) {
+            if (c == '.') {
+                nextTitleCase = true;
+            } else if (nextTitleCase) {
+                c = Character.toTitleCase(c);
+                nextTitleCase = false;
+            }
+
+            titleCase.append(c);
+        }
+        return titleCase.toString();
+    }
+
+    public static void SetBasePackage(String oldName, String newName) {
+        oldSuffix = oldName;
+        newSuffix = newName;
     }
 }

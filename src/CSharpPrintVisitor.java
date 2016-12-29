@@ -47,6 +47,7 @@ import static com.github.javaparser.ast.internal.Utils.isNullOrEmpty;
  */
 public class CSharpPrintVisitor implements VoidVisitor<Object> {
 
+    public static boolean UseJavaDoc;
     private boolean printComments;
 
     public CSharpPrintVisitor() {
@@ -421,9 +422,15 @@ public class CSharpPrintVisitor implements VoidVisitor<Object> {
     }
 
     @Override public void visit(final JavadocComment n, final Object arg) {
-        printer.print("///<summary>");
-        printer.print(n.getContent().replace("\n", "\n///"));
-        printer.printLn("</summary>");
+        if(!UseJavaDoc) {
+            printer.print("///<summary>");
+            printer.print(n.getContent().replace("\n", "\n///"));
+            printer.printLn("</summary>");
+        }else {
+            printer.print("/**");
+            printer.print(n.getContent());
+            printer.printLn("*/");
+        }
     }
 
     @Override public void visit(final ClassOrInterfaceType n, final Object arg) {
@@ -1710,6 +1717,29 @@ public class CSharpPrintVisitor implements VoidVisitor<Object> {
         for (int i=0; i<commentsAtEnd; i++){
             everything.get(everything.size()-commentsAtEnd+i).accept(this, null);
         }
+    }
+
+    private String toSummaryComment(String comment) {
+        String[] lines = comment.split("\n");
+        StringBuilder sb;
+        int lc = 0;
+        for(String line: lines) {
+            if(line.isEmpty()) continue;
+            sb = new StringBuilder();
+            sb.append("\n");
+            int i = 0;
+            while(i < line.length()-1 && line.charAt(i++) == ' ')
+                sb.append(' ');
+            sb.append("/// ");
+            while(i++ <= line.length())
+                sb.append(line.charAt(i-2));
+            lines[lc++] = sb.toString();
+        }
+        StringBuilder builder = new StringBuilder();
+        for(String s : lines) {
+            builder.append(s);
+        }
+        return comment; // builder.toString();
     }
 
     private Dictionary<String, String> conflictingKeywordResolver = new Hashtable<String, String>();
