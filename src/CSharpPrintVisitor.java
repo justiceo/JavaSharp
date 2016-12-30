@@ -424,6 +424,8 @@ public class CSharpPrintVisitor implements VoidVisitor<Object> {
     }
 
     @Override public void visit(final JavadocComment n, final Object arg) {
+        if(!printComments) return;
+
         if(!UseJavaDoc) {
             printer.print("///<summary>");
             printer.print(n.getContent().replace("\n", "\n///"));
@@ -624,10 +626,10 @@ public class CSharpPrintVisitor implements VoidVisitor<Object> {
 
     @Override public void visit(final VariableDeclaratorId n, final Object arg) {
         printJavaComment(n.getComment(), arg);
-        printer.print(n.getName());
         for (int i = 0; i < n.getArrayCount(); i++) {
             printer.print("[]");
         }
+        printer.print(n.getName());
     }
 
     @Override public void visit(final ArrayInitializerExpr n, final Object arg) {
