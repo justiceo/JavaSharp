@@ -1,0 +1,75 @@
+String => string
+length(): int => Length: int
+charAt(int index): int =>
+int codePointAt(int index) => 
+int codePointBefore(int index) 
+int codePointCount(int beginIndex, int endIndex)
+int offsetByCodePoints(int index, int codePointOffset)
+void getChars(char dst[], int dstBegin)
+void getChars(int srcBegin, int srcEnd, char dst[], int dstBegin)
+void getBytes(int srcBegin, int srcEnd, byte dst[], int dstBegin)
+byte[] getBytes(String charsetName)
+byte[] getBytes(Charset charset)
+byte[] getBytes()
+boolean equals(Object anObject)
+boolean contentEquals(StringBuffer sb)
+boolean nonSyncContentEquals(AbstractStringBuilder sb)
+boolean contentEquals(CharSequence cs) 
+boolean equalsIgnoreCase(String anotherString)
+int compareTo(String anotherString)
+static final Comparator<String> CASE_INSENSITIVE_ORDER
+int compareToIgnoreCase(String str)
+boolean regionMatches(int toffset, String other, int ooffset, int len)
+boolean regionMatches(boolean ignoreCase, int toffset, String other, int ooffset, int len)
+boolean startsWith(String prefix, int toffset)
+boolean startsWith(String prefix)
+boolean endsWith(String suffix)
+int hashCode()
+int indexOf(int ch)
+int indexOf(int ch, int fromIndex)
+int indexOfSupplementary(int ch, int fromIndex)
+int lastIndexOf(int ch)
+int lastIndexOf(int ch, int fromIndex) 
+int lastIndexOfSupplementary(int ch, int fromIndex)
+int indexOf(String str)
+int indexOf(String str, int fromIndex)
+int indexOf(char[] source, int sourceOffset, int sourceCount, String target, int fromIndex)
+int indexOf(char[] source, int sourceOffset, int sourceCount, char[] target, int targetOffset, int targetCount, int fromIndex)
+int lastIndexOf(String str)                         => LastIndexOf
+int lastIndexOf(String str, int fromIndex)          => LastIndexOf
+int lastIndexOf(char[] source, int sourceOffset, int sourceCount, String target, int fromIndex)                                     - *******
+int lastIndexOf(char[] source, int sourceOffset, int sourceCount, char[] target, int targetOffset, int targetCount, int fromIndex)  - *******
+String substring(int beginIndex)                                => Substring
+String substring(int beginIndex, int endIndex)                  => Substring
+CharSequence subSequence(int beginIndex, int endIndex)          => Substring
+String concat(String str)                                       => Concat
+String replace(char oldChar, char newChar)                      => Replace
+boolean matches(String regex)                                   - **********
+boolean contains(CharSequence s)                                => Contains
+String replaceFirst(String regex, String replacement)                                   - **********
+String replaceAll(String regex, String replacement)                                     => Replace
+String replace(CharSequence target, CharSequence replacement)                           => Replace
+String[] split(String regex, int limit)                                                 => Split
+String[] split(String regex)                                                            => Split
+static String join(CharSequence delimiter, CharSequence... elements)                    => Join
+static String join(CharSequence delimiter, Iterable<? extends CharSequence> elements)   => Join<T> 
+String toLowerCase(Locale locale)       => ToLower
+String toLowerCase()                    => ToLower
+String toUpperCase(Locale locale)       => ToUpper
+String toUpperCase()                    => ToUpper
+String trim()                           => Trim
+String toString()                       => ToString
+char[] toCharArray()                    => ToCharArray
+static String format(String format, Object... args)
+static String format(Locale l, String format, Object... args)
+static String valueOf(Object obj)
+static String valueOf(char data[])
+static String valueOf(char data[], int offset, int count)
+static String copyValueOf(char data[], int offset, int count)
+static String copyValueOf(char data[])
+static String valueOf(boolean b)
+static String valueOf(char c)
+static String valueOf(int i)
+static String valueOf(long l)
+static String valueOf(float f)
+static String valueOf(double d)
