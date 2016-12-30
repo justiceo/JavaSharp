@@ -35,7 +35,7 @@ public class OmniJava {
 
     private static String printVisitor(CompilationUnit cu) {
         CSharpPrintVisitor.UseJavaDoc = true;
-        CSharpPrintVisitor dv = new CSharpPrintVisitor();
+        CSharpPrintVisitor dv = new CSharpPrintVisitor(false);
         cu.accept(dv, null);
         return dv.getSource();
     }

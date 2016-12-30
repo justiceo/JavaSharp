@@ -32,7 +32,7 @@ public class RefactorVisitor extends VoidVisitorAdapter<Object> {
 
     @Override public void visit(final PackageDeclaration n, final Object arg) {
         String name = n.getName().toString().replace(this.oldSuffix, this.newSuffix);
-        name = toPackageTitleCase(name);
+        //name = toPackageTitleCase(name);
         n.setName(new NameExpr(n.getRange(), name));
         visitComment(n.getComment(), arg);
         if (n.getAnnotations() != null) {
@@ -44,7 +44,7 @@ public class RefactorVisitor extends VoidVisitorAdapter<Object> {
 
     @Override public void visit(final ImportDeclaration n, final Object arg) {
         String name = n.getName().toString().replace(this.oldSuffix, this.newSuffix);
-        name = toPackageTitleCase(name);
+        //name = toPackageTitleCase(name);
         n.setName(new NameExpr(n.getRange(), name));
         visitComment(n.getComment(), arg);
     }
